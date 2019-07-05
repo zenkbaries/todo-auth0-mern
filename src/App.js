@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import NavBar from "./components/Navbar";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -30,6 +31,7 @@ class App extends Component {
               </ul>
             </div>
           </nav>
+          {/* <NavBar /> */}
           <br/>
           <Route path="/" exact component={TodosList} />
           <Route path="/edit/:id" component={EditTodo} />
