@@ -31,7 +31,7 @@ class App extends Component {
               </ul>
             </div>
           </nav>
-          {/* <NavBar /> */}
+          <NavBar />
           <br/>
           <Route path="/" exact component={TodosList} />
           <Route path="/edit/:id" component={EditTodo} />
