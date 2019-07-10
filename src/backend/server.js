@@ -11,16 +11,37 @@ const PORT = process.env.PORT || 4000;
 
 let Todo = require('./todo.model');
 
+
+
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect( process.env.DB_URI, { useNewUrlParser: true });
+// mongoose.connect( process.env.DB_URI, { useNewUrlParser: true });
+// const connection = mongoose.connection;
+
+mongoose.connect( process.env.DB_URI, { useNewUrlParser: true })
+    .then(() => {
+            console.log("Connected to Database");
+        }).catch((err) => {
+            console.log("Not Connected to Database ERROR! ", err);
+        }
+    );
+
 const connection = mongoose.connection;
 
+
+// try {
+//     connection.once('open', function() {
+//         console.log("MongoDB database connection established successfully");
+//     })
+//   }
+//   catch(e) {
+//     console.log("Can't connect.");
+//   } 
 connection.once('open', function() {
     console.log("MongoDB database connection established successfully");
 })
-
+ 
 todoRoutes.route('/').get(function(req, res) {
     Todo.find(function(err, todos) {
         if (err) {
@@ -70,6 +91,6 @@ todoRoutes.route('/add').post(function(req, res) {
 
 app.use('/todos', todoRoutes);
 
-app.listen(PORT, function() {
-    console.log("Server is running on Port: " + PORT);
+app.listen(process.env.API_PORT, function() {
+    console.log("Server is running on Port: " + process.env.API_PORT);
 });
