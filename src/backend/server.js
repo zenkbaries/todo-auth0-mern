@@ -3,21 +3,33 @@ const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
+require('dotenv').config();
+
 const todoRoutes = express.Router();
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 
 let Todo = require('./todo.model');
+
+
 
 app.use(cors());
 app.use(bodyParser.json());
 
-mongoose.connect('mongodb://127.0.0.1:27017/todos', { useNewUrlParser: true });
+
+mongoose.connect(process.env.DB_URI, {useNewUrlParser: true})
+        .then(() => {
+            console.log("MongoDB database initial connection established successfully");
+        })
+        .catch((err) => {
+            console.log("Not Connected to Database ERROR! ");
+            console.log(err);
+        });
+
 const connection = mongoose.connection;
-
-connection.once('open', function() {
-    console.log("MongoDB database connection established successfully");
-})
-
+connection.on('disconnected',()=> {console.log('lost connection!')});
+connection.on('reconnected',()=> {console.log('reconnected to db again!')});
+ 
 todoRoutes.route('/').get(function(req, res) {
     Todo.find(function(err, todos) {
         if (err) {
@@ -67,6 +79,11 @@ todoRoutes.route('/add').post(function(req, res) {
 
 app.use('/todos', todoRoutes);
 
-app.listen(PORT, function() {
-    console.log("Server is running on Port: " + PORT);
+process.on('uncaughtException', (err) => {
+    console.error('There was an uncaught error', err)
+    process.exit(1) //mandatory (as per the Node docs)
+})
+
+app.listen(process.env.API_PORT, function() {
+    console.log("Server is running on Port: " + process.env.API_PORT);
 });
