@@ -9,7 +9,7 @@ const NavBar = () => {
   return (
     <div>
       {!isAuthenticated && (
-        <button
+        <button className="btn btn-outline-success my-2 my-sm-0"
           onClick={() =>
             loginWithRedirect({})
           }
@@ -18,7 +18,7 @@ const NavBar = () => {
         </button>
       )}
 
-      {isAuthenticated && <button onClick={() => logout()}>Log out</button>}
+      {isAuthenticated && <button className="btn btn-outline-success my-2 my-sm-0" onClick={() => logout()}>Log out</button>}
     </div>
   );
 };
